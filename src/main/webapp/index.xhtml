@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="resources/css/default.css" rel="stylesheet" type="text/css" />
+	<title>Accounting</title>
+</h:head>
+
+<h:body>
+	<h2>Accounting</h2>
+	<p></p>
+
+	<rich:panel id="invoiceEntry" header="Invoice Entry">
+		<h:form id="invoice">
+		<rich:graphValidator value="#{invoice}" id="gv">
+			<p>
+				<rich:messages globalOnly="true" />
+				<rich:messages for="gv"/>
+			</p>
+			<h:panelGrid columns="3" columnClasses="labelcell">
+				<h:outputLabel value="Contact Name:" for="contact" />
+				<h:inputText value="#{invoice.contactName}" id="contact">
+					<rich:validator />
+				</h:inputText>
+				<rich:message for="contact" />
+			</h:panelGrid>
+			<p>
+				<a4j:commandButton execute="@form" action="#{orderEntry.create}"
+					render="invoiceEntry" />
+			</p>
+			</rich:graphValidator>
+		</h:form>
+	</rich:panel>
+    <hr />
+	<rich:panel id="invoiceTable" header="Invoices">
+		<h:panelGroup rendered="#{empty invoiceReport}">
+			<em>There are no invoices.</em>
+		</h:panelGroup>
+		<rich:dataTable value="#{invoiceReport}" var="rptinvoice"
+			rendered="#{not empty invoiceReport}" styleClass="invoices"
+			rowClasses="even, odd">
+			<rich:column>
+				<f:facet name="header">Inv No.</f:facet>
+			#{rptinvoice.invoiceNumber}
+			<rich:tooltip layout="block">
+					<span><strong>Invoice Details</strong> </span>
+					<hr />
+					<h:panelGrid columns="2" columnClasses="labelcell">
+						<h:outputLabel value="Invoice Number:" for="invoicenum" />
+						<h:outputText value="#{rptinvoice.invoiceNumber}" id="invoicenum" />
+						<h:outputLabel value="Contact:" for="contact" />
+						<h:outputText value="#{rptinvoice.contactName}" id="contact" />
+					</h:panelGrid>
+				</rich:tooltip>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Contact Name</f:facet>
+			    #{rptinvoice.contactName}
+		    </rich:column>
+		</rich:dataTable>
+
+		<a4j:push address="pushInvoice" ondataavailable="alert('new invoice incoming')">
+			<a4j:ajax event="dataavailable" render="invoiceTable" />
+		</a4j:push>
+	</rich:panel>
+</h:body>
+</html>
