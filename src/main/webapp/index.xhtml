@@ -20,8 +20,8 @@
 		<h:form id="invoice">
 		<rich:graphValidator value="#{invoice}" id="gv">
 			<p>
-				<rich:messages globalOnly="true" />
-				<rich:messages for="gv"/>
+				<rich:messages globalOnly="true" ajaxRendered="false"/>
+				<rich:messages for="gv" ajaxRendered="false"/>
 			</p>
 			<h:panelGrid columns="3" columnClasses="labelcell">
 				<h:outputLabel value="Contact Name:" for="contact" />
@@ -38,6 +38,7 @@
 		</h:form>
 	</rich:panel>
     <hr />
+    <h:form>
 	<rich:panel id="invoiceTable" header="Invoices">
 		<h:panelGroup rendered="#{empty invoiceReport}">
 			<em>There are no invoices.</em>
@@ -69,5 +70,6 @@
 			<a4j:ajax event="dataavailable" render="invoiceTable" />
 		</a4j:push>
 	</rich:panel>
+    </h:form>
 </h:body>
 </html>
